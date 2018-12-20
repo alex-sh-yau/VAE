@@ -1,5 +1,4 @@
-# VAE
-Variational Autoencoder for generating financial time-series data
+# Variational Autoencoder for generating financial time-series data
 
 This repository contains the files for the latest version of the Variation Autoencoder 
 project worked on at OPTrust from September-December 2018.
@@ -58,12 +57,25 @@ Other network configurations that are currently optimized through testing for da
 
 
 ### Workflow
-The input features fed through the VAE consist of individual assets within a dataset of the same asset class
+The input features fed through the VAE consist of individual assets within a dataset of the same asset class.
+Each feature corresponds to a node in the initial encoder layer of the neural network. 
+The data consists of a time series of price points for each publicly traded day for each asset.
+Absolute returns are calculated between each day and fed into the network. 
+The distribution of absolute returns for all of the datasets generally lie between -0.1 and 0.1, i.e. maximum of 10% per day.
+
+After being fed through the network, a dataset of slightly varied returns for each day is produced as the output.
+This dataset is converted back to price, and can then be analysed or used.
 
 ---------------------------------------------------------------------------------------------------------
 
+## Things that were tried
 
 
 
+---------------------------------------------------------------------------------------------------------
+
+## Next steps
 
 
+
+---------------------------------------------------------------------------------------------------------
