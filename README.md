@@ -6,13 +6,9 @@ project worked on at OPTrust from September-December 2018.
 
 ---------------------------------------------------------------------------------------------------------
 
-## Author
+#### Author: Alex Yau
 
-Alex Yau
-
-## Supervisor
-
-Brandon Da Silva
+#### Supervisor: Brandon Da Silva
 
 ---------------------------------------------------------------------------------------------------------
 
