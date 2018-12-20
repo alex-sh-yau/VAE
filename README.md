@@ -27,17 +27,24 @@ can drastically improve ML models for trading, stock picking, portfolio/risk all
 
 
 ### Model
+
+#### Encoder
 The current VAE model is made up of a neural network that takes in a certain number of assets as input nodes, X. 
 The data is compressed through a hidden layer of X/2 nodes, then down to a latent space layer, z, of X/4 hidden nodes. 
-The mean and standard deviation is sampled from the latent distribution of z with ReLu and SoftPlus activation functions, respectively. 
-(z_mean and z_stddev)
+The mean and standard deviation is sampled from the latent distribution of z with ReLu and SoftPlus activation functions, respectively
+(z_mean and z_stddev).
 
 Using the reparameterization trick, a randomly initialized normal distribution with a mean of 0 and standard deviation of 1 
 is multiplied with z_stddev. Adding this to z_mean gives us a "newly configured" latent space z, which sufficiently allows for
 backpropagation of the neural network during training. 
-[For a better explanation of the reparameterization trick: https://www.jeremyjordan.me/variational-autoencoders/]
+*[For a better explanation of the reparameterization trick: https://www.jeremyjordan.me/variational-autoencoders/]
 
-the data is decompressed from the latent space through another hidden layer of X/2 nodes, 
+#### Decoder
+From this reparameterized z-space, data is sampled by variational inference, then decompressed back to a feature space of X nodes.
+Through testing various configurations of the neural network, it was found that applying the reparameterization trick 
+to this final output layer provided better results.
+*Need to prove this
+
 to varied output features of X nodes with mean and standard deviations characteristic of the input features.
 
 
