@@ -24,9 +24,7 @@ can drastically improve ML models for trading, stock picking, portfolio/risk all
 
 ## MLP Implementation
 
-### Model
-
-#### Encoder
+### Encoder
 The current VAE model is made up of a neural network that takes in a certain number of assets as input nodes, X. 
 The data is compressed through a hidden layer of X/2 nodes, then down to a latent space layer, z, of X/4 hidden nodes. 
 The mean and standard deviation is sampled from the latent distribution of z with ReLu and SoftPlus activation functions, respectively
@@ -40,13 +38,13 @@ For a better explanation of the reparameterization trick:
 *   https://towardsdatascience.com/intuitively-understanding-variational-autoencoders-1bfe67eb5daf
 *   https://www.jeremyjordan.me/variational-autoencoders/]
 
-#### Decoder
+### Decoder
 From this reparameterized z-space, data is sampled by variational inference, then decompressed back to a feature space of X nodes.
 Through testing various configurations of the neural network, it was found that applying the reparameterization trick 
 to this final output layer provided better results.
 *   [Need to prove this]
 
-#### The rest
+### The rest
 The model, using the TensorFlow AdamOptimizer, optimizes over two loss functions combined:
 a MSE calculated between the inputs and outputs, and a latent loss function characterized by KL-Divergence. 
 
@@ -84,18 +82,20 @@ This dataset is converted back to price, and can then be analysed or used.
 
 ## Next steps & things to try
 
+### Things to do on current code
 *   Generate decoded outputs for entire dataset, not just the test  (Did on a previous iteration with different dataset - look within archive)
 *   Output the decoded price data to .csv
 *   Test generated .csv data with robust trading model for training to analyse its effects
+*   Improve documentation of results
 
-
+### Things to try with current code
 *   Maximum Mean Discrepancy VAE: https://ermongroup.github.io/blog/a-tutorial-on-mmd-variational-autoencoders/ 
 *   Separate Encoder and Decoder into individual classes (might solve previous problem of trying to include model training within the same class)
 *   Combine VAE with GAN 
 *   VAE with latent constraints (Basically VAE with CGAN): https://colab.research.google.com/notebooks/latent_constraints/latentconstraints.ipynb 
 *   Sinkhorn Autoencoder (?)
 
-
+### Implementations to try
 *   CNN implementation: use pictures of price charts, map output price charts to real price values
 *   RNN implementation: Use GRU and compare results with LSTM
 *   Google Deepmind's RNN VAE: https://github.com/snowkylin/rnn-vae
