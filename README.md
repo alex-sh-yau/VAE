@@ -37,13 +37,13 @@ The mean and standard deviation is sampled from the latent distribution of z wit
 Using the reparameterization trick, a randomly initialized normal distribution with a mean of 0 and standard deviation of 1 
 is multiplied with z_stddev. Adding this to z_mean gives us a "newly configured" latent space z, which sufficiently allows for
 backpropagation of the neural network during training. 
-*[For a better explanation of the reparameterization trick: https://www.jeremyjordan.me/variational-autoencoders/]
+* [For a better explanation of the reparameterization trick: https://www.jeremyjordan.me/variational-autoencoders/]
 
 #### Decoder
 From this reparameterized z-space, data is sampled by variational inference, then decompressed back to a feature space of X nodes.
 Through testing various configurations of the neural network, it was found that applying the reparameterization trick 
 to this final output layer provided better results.
-*Need to prove this
+* Need to prove this
 
 to varied output features of X nodes with mean and standard deviations characteristic of the input features.
 
