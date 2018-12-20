@@ -85,10 +85,18 @@ This dataset is converted back to price, and can then be analysed or used.
 
 ---------------------------------------------------------------------------------------------------------
 
-## Next steps
+## Next steps & things to try
+
+*   Generate decoded outputs for entire dataset, not just the test set
+*   Output the decoded price data to .csv
+*   Test generate .csv data with robust trading model for training to analyse its effects
 
 *   Sinkhorn Autoencoder (?)
-*   GRU implementation
+*   Separate Encoder and Decoder into individual classes (might solve previous problem of trying to include model training within the same class)
 *   VAE with latent constraints: https://colab.research.google.com/notebooks/latent_constraints/latentconstraints.ipynb 
+
+*   CNN implementation: use pictures of price charts, map output price charts to real price values
+*   RNN implementation: Use GRU and compare results with LSTM
+*   Google Deepmind's RNN VAE: https://github.com/snowkylin/rnn-vae
 
 ---------------------------------------------------------------------------------------------------------
