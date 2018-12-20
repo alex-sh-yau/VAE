@@ -25,7 +25,6 @@ can drastically improve ML models for trading, stock picking, portfolio/risk all
 
 ## Implementation
 
-
 ### Model
 
 #### Encoder
@@ -37,16 +36,29 @@ The mean and standard deviation is sampled from the latent distribution of z wit
 Using the reparameterization trick, a randomly initialized normal distribution with a mean of 0 and standard deviation of 1 
 is multiplied with z_stddev. Adding this to z_mean gives us a "newly configured" latent space z, which sufficiently allows for
 backpropagation of the neural network during training. 
-* [For a better explanation of the reparameterization trick: https://www.jeremyjordan.me/variational-autoencoders/]
+*   [For a better explanation of the reparameterization trick: https://www.jeremyjordan.me/variational-autoencoders/]
 
 #### Decoder
 From this reparameterized z-space, data is sampled by variational inference, then decompressed back to a feature space of X nodes.
 Through testing various configurations of the neural network, it was found that applying the reparameterization trick 
 to this final output layer provided better results.
-* Need to prove this
+*   [Need to prove this]
 
-to varied output features of X nodes with mean and standard deviations characteristic of the input features.
+#### The rest
+The model, using the TensorFlow AdamOptimizer, optimizes over two loss functions combined:
+a MSE calculated between the inputs and outputs, and a latent loss function characterized by KL-Divergence. 
 
+Other network configurations that are currently optimized through testing for datasets of 9 features:
+
+        self.FEATURE_SIZE = X.shape[1] 
+        self.LEARNING_RATE = 0.005
+        self.NEURONS = [int(self.FEATURE_SIZE / 2), int(self.FEATURE_SIZE / 4)]
+        self.EPOCHS = 50
+        self.BATCH_SIZE = 300
+
+
+### Workflow
+The input features fed through the VAE consist of individual assets within a dataset of the same asset class
 
 ---------------------------------------------------------------------------------------------------------
 
