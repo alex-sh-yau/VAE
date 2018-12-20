@@ -35,7 +35,9 @@ The mean and standard deviation is sampled from the latent distribution of z wit
 Using the reparameterization trick, a randomly initialized normal distribution with a mean of 0 and standard deviation of 1 
 is multiplied with z_stddev. Adding this to z_mean gives us a "newly configured" latent space z, which sufficiently allows for
 backpropagation of the neural network during training. 
-*   [For a better explanation of the reparameterization trick: https://www.jeremyjordan.me/variational-autoencoders/]
+*   [For a better explanation of the reparameterization trick: 
+    https://towardsdatascience.com/intuitively-understanding-variational-autoencoders-1bfe67eb5daf
+    https://www.jeremyjordan.me/variational-autoencoders/]
 
 #### Decoder
 From this reparameterized z-space, data is sampled by variational inference, then decompressed back to a feature space of X nodes.
@@ -66,7 +68,15 @@ The distribution of absolute returns for all of the datasets generally lie betwe
 After being fed through the network, a dataset of slightly varied returns for each day is produced as the output.
 This dataset is converted back to price, and can then be analysed or used.
 
+
+### RNN implementation
+
+
+
 ---------------------------------------------------------------------------------------------------------
+
+
+
 
 ## Things that were tried
 
@@ -76,6 +86,8 @@ This dataset is converted back to price, and can then be analysed or used.
 
 ## Next steps
 
-
+Sinkhorn Autoencoder (?)
+GRU implementation
+VAE with latent constraints: https://colab.research.google.com/notebooks/latent_constraints/latentconstraints.ipynb 
 
 ---------------------------------------------------------------------------------------------------------
