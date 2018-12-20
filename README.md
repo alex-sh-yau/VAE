@@ -1,6 +1,6 @@
-# Variational Autoencoder for generating financial time-series data
+# VAE for generating financial time-series data
 
-This repository contains the files for the latest version of the Variation Autoencoder 
+This repository contains the files for the latest version of the Variational Autoencoder 
 project worked on at OPTrust from September-December 2018.
 
 ---------------------------------------------------------------------------------------------------------
@@ -22,7 +22,7 @@ can drastically improve ML models for trading, stock picking, portfolio/risk all
 
 ---------------------------------------------------------------------------------------------------------
 
-## Implementation
+## MLP Implementation
 
 ### Model
 
@@ -58,7 +58,6 @@ Other network configurations that are currently optimized through testing for da
         self.EPOCHS = 50
         self.BATCH_SIZE = 300
 
-
 ### Workflow
 The input features fed through the VAE consist of individual assets within a dataset of the same asset class.
 Each feature corresponds to a node in the initial encoder layer of the neural network. 
@@ -69,15 +68,13 @@ The distribution of absolute returns for all of the datasets generally lie betwe
 After being fed through the network, a dataset of slightly varied returns for each day is produced as the output.
 This dataset is converted back to price, and can then be analysed or used.
 
+---------------------------------------------------------------------------------------------------------
 
-### RNN implementation
+## RNN implementation
 
 
 
 ---------------------------------------------------------------------------------------------------------
-
-
-
 
 ## Things that were tried
 
@@ -87,13 +84,17 @@ This dataset is converted back to price, and can then be analysed or used.
 
 ## Next steps & things to try
 
-*   Generate decoded outputs for entire dataset, not just the test set
+*   Generate decoded outputs for entire dataset, not just the test  (Did on a previous iteration with different dataset - look within archive)
 *   Output the decoded price data to .csv
-*   Test generate .csv data with robust trading model for training to analyse its effects
+*   Test generated .csv data with robust trading model for training to analyse its effects
 
-*   Sinkhorn Autoencoder (?)
+
+*   Maximum Mean Discrepancy VAE: https://ermongroup.github.io/blog/a-tutorial-on-mmd-variational-autoencoders/ 
 *   Separate Encoder and Decoder into individual classes (might solve previous problem of trying to include model training within the same class)
-*   VAE with latent constraints: https://colab.research.google.com/notebooks/latent_constraints/latentconstraints.ipynb 
+*   Combine VAE with GAN 
+*   VAE with latent constraints (Basically VAE with CGAN): https://colab.research.google.com/notebooks/latent_constraints/latentconstraints.ipynb 
+*   Sinkhorn Autoencoder (?)
+
 
 *   CNN implementation: use pictures of price charts, map output price charts to real price values
 *   RNN implementation: Use GRU and compare results with LSTM
