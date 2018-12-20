@@ -87,8 +87,8 @@ This dataset is converted back to price, and can then be analysed or used.
 
 ## Next steps
 
-Sinkhorn Autoencoder (?)
-GRU implementation
-VAE with latent constraints: https://colab.research.google.com/notebooks/latent_constraints/latentconstraints.ipynb 
+*   Sinkhorn Autoencoder (?)
+*   GRU implementation
+*   VAE with latent constraints: https://colab.research.google.com/notebooks/latent_constraints/latentconstraints.ipynb 
 
 ---------------------------------------------------------------------------------------------------------
