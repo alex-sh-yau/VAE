@@ -83,7 +83,6 @@ def chain_returns(model, sess, n_out, x_test, x_test_price):
                     chained_returns[k,i,j] = chained_returns[k,i-1,j] * (1 + returns[k,i-1,j])
     return chained_returns, returns
 
-        
 # Import and preprocess data, split into train/test set
 def data_preprocess(df, num_periods):
     null_rows = pd.isnull(df).any(axis=1).nonzero()[0]
@@ -146,10 +145,7 @@ class ModelGen():
         self.LSTM_HIDDEN = 50
         self.EPOCHS = 250
         self.NUM_PERIODS = 20
-#        self.BATCH_SIZE = 250
         self.N_OUTPUTS = self.FEATURE_SIZE # Number of outputs for the model to generate
-        
-        #tf.reset_default_graph()
 
         sess_1 = tf.Session()
         model = VariationalAutoencoder(self.FEATURE_SIZE, self.NEURONS, self.LEARNING_RATE, self.NUM_PERIODS, self.LSTM_HIDDEN)
@@ -182,16 +178,28 @@ if __name__ == '__main__':
     g_1 = tf.Graph()
     with g_1.as_default():
         with tf.variable_scope(tf.get_variable_scope(), reuse=tf.AUTO_REUSE):
+            
             vae = [ModelGen(X_tr[0], X_te[0], X_tr_p[0], X_te_p[0]),
                    ModelGen(X_tr[1], X_te[1], X_tr_p[1], X_te_p[1]),
                    ModelGen(X_tr[2], X_te[2], X_tr_p[2], X_te_p[2]),
                    ModelGen(X_tr[3], X_te[3], X_tr_p[3], X_te_p[3])]
+
             visualizer = [charts.Charts(X_te_p[0], X_te[0], vae[0].y, vae[0].y_r, df[0]),
                           charts.Charts(X_te_p[1], X_te[1], vae[1].y, vae[1].y_r, df[1]),
                           charts.Charts(X_te_p[2], X_te[2], vae[2].y, vae[2].y_r, df[2]),
                           charts.Charts(X_te_p[3], X_te[3], vae[3].y, vae[3].y_r, df[3])]
             
-            ''' Refer to charts_1_0.py for input parameters
+            df_kl_r = [visualizer[0].KL_returns(n_out=vae[0].N_OUTPUTS),
+                       visualizer[1].KL_returns(n_out=vae[1].N_OUTPUTS),
+                       visualizer[2].KL_returns(n_out=vae[2].N_OUTPUTS),
+                       visualizer[3].KL_returns(n_out=vae[3].N_OUTPUTS)]
+            
+            df_kl_p = [visualizer[0].KL_price(n_out=vae[0].N_OUTPUTS),
+                       visualizer[1].KL_price(n_out=vae[1].N_OUTPUTS),
+                       visualizer[2].KL_price(n_out=vae[2].N_OUTPUTS),
+                       visualizer[3].KL_price(n_out=vae[3].N_OUTPUTS)]
+            
+            ''' Refer to charts_1_0_rnn.py for input parameters
                 Note: current charted inputs and outputs are generated using test set data '''
     #        visualizer[0].stddev_check(output_v=1).show()
     #        visualizer[0].sma_cross(M_window=90, Y_window=360, asset=5, out_charts=3).show()
@@ -199,25 +207,27 @@ if __name__ == '__main__':
     #        visualizer[0].rolling_corr(window=180, asset=5, out_charts=3).show()
     #        visualizer[0].corr_in_vs_out(window=180, output_v=1, asset_1=4, asset_2=5).show()
     #        visualizer[0].spread(output_v=1, asset_1=0, asset_2=2).show()
+    
+            ######################################################
+            "Data visualization of input vs all generated outputs"
             visualizer[0].price_charts().show()
             visualizer[1].price_charts().show()
             visualizer[2].price_charts().show()
             visualizer[3].price_charts().show()
+            ######################################################
             
-            df_kl_r = [visualizer[0].KL_returns(n_out=vae[0].N_OUTPUTS),
-                       visualizer[1].KL_returns(n_out=vae[1].N_OUTPUTS),
-                       visualizer[2].KL_returns(n_out=vae[2].N_OUTPUTS),
-                       visualizer[3].KL_returns(n_out=vae[3].N_OUTPUTS)]
+            #######################################################################################
+            "Data visualization of returns percentage distributions: input vs all generated outputs"
 #            visualizer[0].all_returns_all_dist(n_features=vae[0].FEATURE_SIZE, n_out=vae[0].N_OUTPUTS, df_kl=df_kl_r[0]).show()
 #            visualizer[1].all_returns_all_dist(n_features=vae[1].FEATURE_SIZE, n_out=vae[1].N_OUTPUTS, df_kl=df_kl_r[1]).show()
 #            visualizer[2].all_returns_all_dist(n_features=vae[2].FEATURE_SIZE, n_out=vae[2].N_OUTPUTS, df_kl=df_kl_r[2]).show()
 #            visualizer[3].all_returns_all_dist(n_features=vae[3].FEATURE_SIZE, n_out=vae[3].N_OUTPUTS, df_kl=df_kl_r[3]).show()
+            #######################################################################################
             
-            df_kl_p = [visualizer[0].KL_price(n_out=vae[0].N_OUTPUTS),
-                       visualizer[1].KL_price(n_out=vae[1].N_OUTPUTS),
-                       visualizer[2].KL_price(n_out=vae[2].N_OUTPUTS),
-                       visualizer[3].KL_price(n_out=vae[3].N_OUTPUTS)]
+            ################################################################################
+            "Data visualization of real price distributions: input vs all generated outputs"
 #            visualizer[0].all_prices_all_dist(n_features=vae[0].FEATURE_SIZE, n_out=vae[0].N_OUTPUTS, df_kl=df_kl_p[0]).show()
 #            visualizer[1].all_prices_all_dist(n_features=vae[1].FEATURE_SIZE, n_out=vae[1].N_OUTPUTS, df_kl=df_kl_p[1]).show()
 #            visualizer[2].all_prices_all_dist(n_features=vae[2].FEATURE_SIZE, n_out=vae[2].N_OUTPUTS, df_kl=df_kl_p[2]).show()
 #            visualizer[3].all_prices_all_dist(n_features=vae[3].FEATURE_SIZE, n_out=vae[3].N_OUTPUTS, df_kl=df_kl_p[3]).show()
+            ################################################################################
