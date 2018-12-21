@@ -22,6 +22,18 @@ can drastically improve ML models for trading, stock picking, portfolio/risk all
 
 ---------------------------------------------------------------------------------------------------------
 
+## Neural network flow
+
+The input features fed through the VAE consist of individual assets within a dataset of the same asset class.
+Each feature corresponds to a node in the initial encoder layer of the neural network. 
+The data consists of a time series of price points for each publicly traded day for each asset.
+Absolute returns are calculated between each day and fed into the network. 
+The distribution of absolute returns for all of the datasets generally lie between -0.1 and 0.1, i.e. maximum of 10% per day.
+
+After being fed through the network, a dataset of slightly varied returns for each day is produced as the output.
+This dataset is converted back to price, and can then be analysed or used.
+
+
 ## MLP Implementation
 
 ### Encoder
@@ -50,39 +62,65 @@ a MSE calculated between the inputs and outputs, and a latent loss function char
 
 Other network configurations that are currently optimized through testing for datasets of 9 features:
 
-        self.FEATURE_SIZE = X.shape[1] 
+        self.FEATURE_SIZE = X_train.shape[1] 
         self.LEARNING_RATE = 0.005
         self.NEURONS = [int(self.FEATURE_SIZE / 2), int(self.FEATURE_SIZE / 4)]
         self.EPOCHS = 50
         self.BATCH_SIZE = 300
 
-### Workflow
-The input features fed through the VAE consist of individual assets within a dataset of the same asset class.
-Each feature corresponds to a node in the initial encoder layer of the neural network. 
-The data consists of a time series of price points for each publicly traded day for each asset.
-Absolute returns are calculated between each day and fed into the network. 
-The distribution of absolute returns for all of the datasets generally lie between -0.1 and 0.1, i.e. maximum of 10% per day.
+## RNN implementation - LSTM
 
-After being fed through the network, a dataset of slightly varied returns for each day is produced as the output.
-This dataset is converted back to price, and can then be analysed or used.
+### Encoder
 
----------------------------------------------------------------------------------------------------------
+The first part of the RNN model consists of an LSTM with 50 hidden cells. 
+The input features X are fed through the LSTM in batchs of 20 timesteps, then output back to X nodes.
 
-## RNN implementation
+After running through the LSTM, the data is reshaped and fed through an MLP hidden layer into a latent space z of X/4 nodes, 
+with the reparameterization trick applied the same way as in the MLP VAE encoder. 
 
+### Decoder
 
+Data is sampled from this z-space with variational inference and decompressed back out to X nodes, as in the MLP VAE decoder.
+
+The outputs here are then reshaped and fed through another LSTM with the same parameters as in the encoder,
+then finally output back into the feature space.
+
+### The rest
+
+The model, using the TensorFlow AdamOptimizer, optimizes over two loss functions combined:
+a MSE calculated between the inputs and outputs, and a latent loss function characterized by KL-Divergence. 
+
+Other network configurations that are currently optimized through testing for datasets of 9 features:
+
+        self.FEATURE_SIZE = X_train.shape[2]
+        self.LEARNING_RATE = 0.0015
+        self.NEURONS = int(self.FEATURE_SIZE / 4)
+        self.LSTM_HIDDEN = 50
+        self.EPOCHS = 250
+        self.NUM_PERIODS = 20
+        self.N_OUTPUTS = self.FEATURE_SIZE
 
 ---------------------------------------------------------------------------------------------------------
 
 ## Things that were tried
 
+Most things tried involved iterative blackbox testing of the model configurations through parameter tuning.
+Current models using roughly tuned parameters that produce fairly realistic results, but there should be room
+for further improvements
 
+One notable unsolved problem involves the data structure of the code in the neural network file.
+If the model training function is kept and called within the same class as the model, the results produced
+are incredibly unrealistic with huge deviations in mean and std dev. 
+This is found in the archived python filed main_22.py. Further analysis is needed to find out the cause of this.
+
+Anything else may be found in the VAEupdate word docs in this repository.
 
 ---------------------------------------------------------------------------------------------------------
 
 ## Next steps & things to try
 
 ### Things to do on current code
+*   Improve LSTM VAE - Results for a few assets in each dataset are skewed relative to others. See RNN VAE results figures.
 *   Generate decoded outputs for entire dataset, not just the test  (Did on a previous iteration with different dataset - look within archive)
 *   Output the decoded price data to .csv
 *   Test generated .csv data with robust trading model for training to analyse its effects
