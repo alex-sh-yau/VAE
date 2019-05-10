@@ -8,8 +8,6 @@ A majority of the work was done between September to December 2018.
 
 #### Author: Alex Yau
 
-#### Supervisor: Brandon Da Silva
-
 ---------------------------------------------------------------------------------------------------------
 
 ## Abstract
