@@ -2,7 +2,6 @@
 
 This repository contains the files for the latest version of the Variational Autoencoder (VAE)
 project used to generate synthetic time-series data in various financial markets. 
-A majority of the work was done between September to December 2018.
 
 ---------------------------------------------------------------------------------------------------------
 
